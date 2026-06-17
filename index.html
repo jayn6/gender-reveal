@@ -1,364 +1,1192 @@
-<!doctype html>
-<html lang="en" class="h-full">
- <head><script src="/_sdk/telemetry_sdk.js"></script>
+<!DOCTYPE html>
+<html lang="en">
+<head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>The Journey to Our Little Miracle</title>
-  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
-  <script src="/_sdk/element_sdk.js"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&amp;family=Quicksand:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet">
+  <title>Our Little Secret ✨</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script:wght@600;700&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    html, body { height: 100%; margin: 0; }
-    body { font-family: 'Quicksand', sans-serif; }
-    .playfair { font-family: 'Playfair Display', serif; }
+    :root {
+      /* Neutral palette — pink only appears at the final reveal */
+      --cream: #faf7f2;
+      --warm-white: #fffdf9;
+      --sage: #9cb8a0;
+      --sage-light: #e8f0e9;
+      --gold: #c9a87c;
+      --gold-light: #f5ebe0;
+      --soft-blue: #8eb4c9;
+      --blue-light: #e3eef5;
+      --text: #4a4540;
+      --text-light: #7a736c;
+      --shadow: rgba(74, 69, 64, 0.1);
+      /* Reveal-only pinks (used at the very end) */
+      --blush: #ffd6e8;
+      --rose: #ff8fab;
+      --deep-rose: #e85d8a;
+    }
+
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Quicksand', sans-serif;
+      background: var(--cream);
+      color: var(--text);
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* Floating background — neutral stars & sparkles */
+    .hearts-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+
+    .heart-float {
+      position: absolute;
+      font-size: 1rem;
+      opacity: 0.1;
+      animation: floatHeart linear infinite;
+    }
+
+    @keyframes floatHeart {
+      0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+      10% { opacity: 0.1; }
+      90% { opacity: 0.1; }
+      100% { transform: translateY(-10vh) rotate(360deg); opacity: 0; }
+    }
+
+    /* Music toggle */
+    .music-btn {
+      position: fixed;
+      bottom: 1.5rem;
+      right: 1.5rem;
+      z-index: 500;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      border: 2px solid var(--gold);
+      background: white;
+      font-size: 1.3rem;
+      cursor: pointer;
+      box-shadow: 0 4px 16px var(--shadow);
+      transition: transform 0.2s, background 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .music-btn:hover { transform: scale(1.08); }
+    .music-btn.playing { background: var(--gold-light); animation: pulse 2s ease-in-out infinite; }
+
+    /* Hero — warm & neutral */
+    .hero {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 2rem;
+      position: relative;
+      background: linear-gradient(180deg, var(--warm-white) 0%, var(--cream) 60%, var(--gold-light) 100%);
+    }
+
+    .hero-badge {
+      background: white;
+      border: 2px dashed var(--gold);
+      border-radius: 50px;
+      padding: 0.4rem 1.2rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text);
+      margin-bottom: 1.5rem;
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.03); }
+    }
+
+    .hero h1 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.8rem, 8vw, 5rem);
+      color: var(--text);
+      line-height: 1.2;
+      margin-bottom: 0.5rem;
+    }
+
+    .hero .subtitle {
+      font-size: clamp(1rem, 3vw, 1.3rem);
+      color: var(--text-light);
+      max-width: 480px;
+      margin-bottom: 2rem;
+    }
+
+    .scroll-hint {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--gold);
+      font-weight: 600;
+      font-size: 0.9rem;
+      animation: bounce 2s ease-in-out infinite;
+      cursor: pointer;
+      margin-top: 2rem;
+    }
+
+    .scroll-hint .arrow { font-size: 1.5rem; }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(8px); }
+    }
+
+    /* Journey */
+    .journey {
+      position: relative;
+      padding: 4rem 1.5rem 6rem;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    .journey-title { text-align: center; margin-bottom: 4rem; }
+
+    .journey-title h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2.2rem, 6vw, 3.5rem);
+      color: var(--text);
+    }
+
+    .journey-title p {
+      color: var(--text-light);
+      font-size: 1.05rem;
+      margin-top: 0.5rem;
+    }
+
+
     
-    @keyframes float { 0%,100%{transform:translateY(0)} 50%{transform:translateY(-20px)} }
-    @keyframes sparkle { 0%,100%{opacity:0;transform:scale(0)} 50%{opacity:1;transform:scale(1)} }
-    @keyframes pulse-glow { 0%,100%{text-shadow:0 0 20px rgba(236,72,153,0.5)} 50%{text-shadow:0 0 60px rgba(236,72,153,1)} }
-    @keyframes confetti-fall { 0%{transform:translateY(-100%) rotate(0deg)} 100%{transform:translateY(800%) rotate(720deg)} }
-    @keyframes balloon-rise { 0%{transform:translateY(100%) scale(0.8)} 100%{transform:translateY(-200%) scale(1)} }
-    @keyframes fade-in-up { from{opacity:0;transform:translateY(40px)} to{opacity:1;transform:translateY(0)} }
-    @keyframes twinkle { 0%,100%{opacity:0.2} 50%{opacity:1} }
-    @keyframes door-open { 0%{transform:perspective(800px) rotateY(0)} 100%{transform:perspective(800px) rotateY(-105deg)} }
-    
-    .float { animation: float 3s ease-in-out infinite; }
-    .sparkle { animation: sparkle 2s ease-in-out infinite; }
-    .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-    .fade-in-up { animation: fade-in-up 0.8s ease forwards; opacity: 0; }
-    .twinkle { animation: twinkle 2s ease-in-out infinite; }
-    
-    .confetti-piece { position:absolute; width:10px; height:10px; animation: confetti-fall 3s linear forwards; }
-    .balloon { position:absolute; width:40px; height:50px; border-radius:50% 50% 50% 50% / 60% 60% 40% 40%; animation: balloon-rise 4s ease-out forwards; }
-    
-    .roadmap-line { position:absolute; left:50%; top:0; bottom:0; width:3px; background:linear-gradient(to bottom,#fbbf24,#ec4899,#a78bfa); transform:translateX(-50%); }
-    
-    .door { transition: transform 1.5s ease; transform-origin: left center; }
-    .door.opened { transform: perspective(800px) rotateY(-105deg); }
-    
-    .section-visible .fade-target { animation: fade-in-up 0.8s ease forwards; }
-    
-    .hero-bg { background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 30%, #fffbeb 60%, #fdf2f8 100%); }
-    .suspense-bg { background: linear-gradient(180deg, #1e1b4b 0%, #312e81 50%, #1e1b4b 100%); }
-    
-    .guess-btn { transition: all 0.3s ease; }
-    .guess-btn:hover { transform: scale(1.1) rotate(2deg); }
-    
-    @media(max-width:768px) { .roadmap-line { left:20px; } }
+
+   
+
+    .milestone-content {
+      width: calc(60% - 46px);
+      background: white;
+      border-radius: 24px;
+      padding: 1.5rem;
+      box-shadow: 0 8px 32px var(--shadow);
+      border: 1px solid rgba(201, 168, 124, 0.25);
+      margin: 0 auto;
+    }
+
+    .milestone-label {
+      display: inline-block;
+      background: var(--gold-light);
+      color: var(--text);
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      margin-bottom: 0.8rem;
+    }
+
+    .milestone-content h3 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.8rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+      
+    }
+
+    .milestone-content p {
+      font-size: 0.95rem;
+      color: var(--text-light);
+      margin-bottom: 1rem;
+    }
+
+    .photo-frame {
+      position: relative;
+      border-radius: 16px;
+      overflow: hidden;
+      aspect-ratio: 4/3;
+      background: linear-gradient(135deg, var(--gold-light) 0%, var(--sage-light) 100%);
+      border: 2px solid white;
+    }
+
+    .photo-frame img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .photo-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      color: var(--text-light);
+      font-size: 0.85rem;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    .photo-placeholder .emoji { font-size: 3rem; opacity: 0.7; }
+
+    .photo-gallery {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.5rem;
+    }
+
+    .photo-gallery .photo-frame { aspect-ratio: 1; }
+
+    .ultrasound-frame {
+      background: #1a1a2e;
+      border-color: var(--gold);
+    }
+
+    .ultrasound-frame .photo-placeholder { color: #7ec8e3; }
+
+    /* Mystery — balanced pink & blue */
+    .mystery-section {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 4rem 2rem;
+      background: linear-gradient(180deg, var(--cream) 0%, var(--blue-light) 50%, var(--gold-light) 100%);
+      position: relative;
+    }
+
+    .mystery-section::before {
+      content: '?';
+      position: absolute;
+      font-size: 20rem;
+      font-family: 'Dancing Script', cursive;
+      color: rgba(142, 180, 201, 0.08);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
+    }
+
+    .mystery-box {
+      background: white;
+      border-radius: 32px;
+      padding: 3rem 2.5rem;
+      max-width: 540px;
+      box-shadow: 0 20px 60px var(--shadow);
+      border: 2px solid rgba(142, 180, 201, 0.3);
+      position: relative;
+      z-index: 1;
+    }
+
+    .mystery-box h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(2rem, 5vw, 2.8rem);
+      color: var(--text);
+      margin-bottom: 1rem;
+    }
+
+    .mystery-box > p {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      font-size: 1.05rem;
+    }
+
+    /* Vote section */
+    .vote-section {
+      margin-bottom: 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, var(--blue-light), var(--gold-light));
+      border-radius: 20px;
+    }
+
+    .vote-section h3 {
+      font-family: 'Dancing Script', cursive;
+      font-size: 1.6rem;
+      color: var(--text);
+      margin-bottom: 0.5rem;
+    }
+
+    .vote-section .vote-hint {
+      font-size: 0.85rem;
+      color: var(--text-light);
+      margin-bottom: 1.2rem;
+    }
+
+    .vote-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .vote-btn {
+      flex: 1;
+      min-width: 130px;
+      max-width: 180px;
+      padding: 1rem 1.2rem;
+      border: none;
+      border-radius: 16px;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+      color: white;
+    }
+
+    .vote-btn:hover:not(:disabled) {
+      transform: translateY(-3px);
+    }
+
+    .vote-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .vote-btn.boy {
+      background: linear-gradient(135deg, #7eb8e0, #5a9fd4);
+      box-shadow: 0 6px 20px rgba(90, 159, 212, 0.35);
+    }
+
+    .vote-btn.girl {
+      background: linear-gradient(135deg, #f0a0b8, #e8789a);
+      box-shadow: 0 6px 20px rgba(232, 120, 154, 0.35);
+    }
+
+    .vote-results {
+      display: none;
+      margin-top: 1.2rem;
+      animation: fadeUp 0.5s ease;
+    }
+
+    .vote-results.show { display: block; }
+
+    .vote-loading {
+      display: none;
+      margin-top: 1rem;
+      font-size: 0.9rem;
+      color: var(--text-light);
+      font-weight: 600;
+    }
+
+    .vote-loading.show { display: block; }
+
+    .vote-loading .dots::after {
+      content: '';
+      animation: dots 1.2s steps(4, end) infinite;
+    }
+
+    @keyframes dots {
+      0%   { content: ''; }
+      25%  { content: '.'; }
+      50%  { content: '..'; }
+      75%  { content: '...'; }
+    }
+
+    .vote-results .your-guess {
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .vote-bar-wrap { margin-bottom: 0.8rem; }
+
+    .vote-bar-label {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.3rem;
+    }
+
+    .vote-bar-label.boy-label { color: #5a9fd4; }
+    .vote-bar-label.girl-label { color: #e8789a; }
+
+    .vote-bar {
+      height: 12px;
+      background: rgba(255,255,255,0.7);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+
+    .vote-bar-fill {
+      height: 100%;
+      border-radius: 10px;
+      transition: width 1s ease;
+      width: 0%;
+    }
+
+    .vote-bar-fill.boy-fill { background: linear-gradient(90deg, #7eb8e0, #5a9fd4); }
+    .vote-bar-fill.girl-fill { background: linear-gradient(90deg, #f0a0b8, #e8789a); }
+
+    .vote-total {
+      font-size: 0.8rem;
+      color: var(--text-light);
+      margin-top: 0.8rem;
+    }
+
+    .vote-majority {
+      margin-top: 0.6rem;
+      font-weight: 700;
+      font-size: 0.9rem;
+      color: var(--text);
+    }
+
+    .question-marks {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+    }
+
+    .qm {
+      width: 70px;
+      height: 70px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2rem;
+      font-weight: 700;
+      animation: wobble 3s ease-in-out infinite;
+    }
+
+    .qm.pink {
+      background: linear-gradient(135deg, #f0a0b8, #e8789a);
+      color: white;
+      animation-delay: 0s;
+    }
+
+    .qm.blue {
+      background: linear-gradient(135deg, #a8d4f0, #5a9fd4);
+      color: white;
+      animation-delay: 0.5s;
+    }
+
+    @keyframes wobble {
+      0%, 100% { transform: rotate(-5deg) scale(1); }
+      50% { transform: rotate(5deg) scale(1.08); }
+    }
+
+    .reveal-btn {
+      background: linear-gradient(135deg, var(--soft-blue), var(--gold));
+      color: white;
+      border: none;
+      padding: 1rem 2.5rem;
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.1rem;
+      font-weight: 700;
+      border-radius: 50px;
+      cursor: pointer;
+      box-shadow: 0 8px 24px rgba(142, 180, 201, 0.4);
+      transition: transform 0.2s, box-shadow 0.2s, opacity 0.3s;
+      letter-spacing: 0.02em;
+    }
+
+    .reveal-btn:hover:not(:disabled) {
+      transform: translateY(-3px) scale(1.02);
+    }
+
+    .reveal-btn:disabled {
+      opacity: 0.4;
+      cursor: not-allowed;
+    }
+
+    .reveal-btn:active { transform: translateY(0); }
+
+    /* Countdown */
+    .countdown-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(74, 69, 64, 0.92);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.5s ease;
+    }
+
+    .countdown-overlay.active { opacity: 1; pointer-events: all; }
+
+    .countdown-text {
+      color: rgba(255, 255, 255, 0.7);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+
+    .countdown-number {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(8rem, 25vw, 14rem);
+      color: white;
+      line-height: 1;
+      animation: countPop 0.8s ease;
+      text-shadow: 0 0 60px rgba(201, 168, 124, 0.6);
+    }
+
+    @keyframes countPop {
+      0% { transform: scale(0.3); opacity: 0; }
+      60% { transform: scale(1.15); }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    .countdown-hearts {
+      margin-top: 2rem;
+      font-size: 2rem;
+      animation: heartbeat 0.8s ease infinite;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.2); }
+    }
+
+    /* Final reveal — NOW the pink appears! */
+    .reveal-section {
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(180deg, #ffe8f2 0%, #ffd6e8 40%, #ffb3c6 100%);
+      position: relative;
+      overflow: hidden;
+      opacity: 0;
+      transform: scale(0.95);
+      transition: opacity 1s ease, transform 1s ease;
+    }
+
+    .reveal-section.show { opacity: 1; transform: scale(1); }
+
+    .reveal-section h2 {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(1.5rem, 4vw, 2.2rem);
+      color: white;
+      text-shadow: 0 2px 10px rgba(232, 93, 138, 0.3);
+      margin-bottom: 0.5rem;
+      animation: fadeUp 1s ease 0.3s both;
+    }
+
+    .reveal-main {
+      font-family: 'Dancing Script', cursive;
+      font-size: clamp(4rem, 12vw, 8rem);
+      color: white;
+      text-shadow: 0 4px 30px rgba(232, 93, 138, 0.5);
+      line-height: 1.1;
+      animation: revealPop 1.2s cubic-bezier(0.34, 1.56, 0.64, 1) 0.5s both;
+    }
+
+    @keyframes revealPop {
+      0% { transform: scale(0) rotate(-10deg); opacity: 0; }
+      100% { transform: scale(1) rotate(0deg); opacity: 1; }
+    }
+
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .reveal-sub {
+      font-size: clamp(1.1rem, 3vw, 1.4rem);
+      color: rgba(255, 255, 255, 0.95);
+      margin-top: 1.5rem;
+      max-width: 500px;
+      animation: fadeUp 1s ease 1s both;
+    }
+
+    .reveal-bow {
+      font-size: 4rem;
+      margin: 1.5rem 0;
+      animation: fadeUp 1s ease 0.8s both;
+    }
+
+    .reveal-poll {
+      margin-top: 2rem;
+      padding: 1.2rem 1.8rem;
+      background: rgba(255,255,255,0.25);
+      border-radius: 16px;
+      max-width: 400px;
+      animation: fadeUp 1s ease 1.5s both;
+    }
+
+    .reveal-poll p {
+      color: white;
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    .reveal-footer {
+      margin-top: 2rem;
+      font-size: 0.95rem;
+      color: rgba(255, 255, 255, 0.85);
+      animation: fadeUp 1s ease 1.3s both;
+    }
+
+    #confetti {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 999;
+    }
+
+    .sparkle {
+      position: absolute;
+      font-size: 1.5rem;
+      animation: sparkle 2s ease-in-out infinite;
+      pointer-events: none;
+    }
+
+    @keyframes sparkle {
+      0%, 100% { opacity: 0.3; transform: scale(0.8); }
+      50% { opacity: 1; transform: scale(1.2); }
+    }
+
+    @media (max-width: 700px) {
+      .roadmap-path { left: 20px; transform: none; }
+      .milestone { flex-direction: column !important; padding-left: 50px; align-items: flex-start; }
+      .milestone-dot { left: 20px; transform: translateX(-50%); }
+      .milestone-content { width: 100%; }
+      .milestone:nth-child(odd) .milestone-content,
+      .milestone:nth-child(even) .milestone-content { margin: 0; }
+      .mystery-box { padding: 2rem 1.5rem; }
+    }
+
+    .envelope-wrap { display: none; }
+    .envelope-wrap.show { display: block; animation: fadeUp 0.6s ease; }
+
+    .envelope {
+      width: 120px;
+      height: 80px;
+      margin: 0 auto 1.5rem;
+      position: relative;
+      cursor: pointer;
+      perspective: 600px;
+    }
+
+    .envelope-body {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--soft-blue), var(--gold));
+      border-radius: 0 0 8px 8px;
+      position: relative;
+    }
+
+    .envelope-flap {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0;
+      height: 0;
+      border-left: 60px solid transparent;
+      border-right: 60px solid transparent;
+      border-top: 45px solid #7eb8e0;
+      transform-origin: top center;
+      transition: transform 0.6s ease;
+      z-index: 2;
+    }
+
+    .envelope.open .envelope-flap { transform: rotateX(160deg); }
+    .envelope.open .envelope-heart { animation: letterPop 0.6s ease 0.3s both; }
+
+    @keyframes letterPop {
+      from { transform: translate(-50%, -50%) scale(0.5); opacity: 0; }
+      to { transform: translate(-50%, -80%) scale(1.2); opacity: 1; }
+    }
+
+    .envelope-heart {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 2rem;
+      animation: heartbeat 1s ease infinite;
+    }
   </style>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            blush: '#fdf2f8',
-            cream: '#fffbeb',
-            lavender: '#f5f3ff',
-            gold: '#d97706',
-            rose: '#ec4899'
-          }
-        }
-      }
-    }
-  </script>
-  <style>body { box-sizing: border-box; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
- </head>
- <body class="h-full overflow-auto" style="background:#fdf2f8;"><!-- Floating particles -->
-  <div id="particles" class="fixed inset-0 pointer-events-none z-50"></div><!-- SECTION 1 - WELCOME -->
-  <section id="hero" class="hero-bg relative flex items-center justify-center text-center px-6" style="min-height:100%;">
-   <div class="absolute inset-0 overflow-hidden pointer-events-none">
-    <div class="absolute top-10 left-10 text-pink-200 text-4xl float" style="animation-delay:0s">
-     ♥
-    </div>
-    <div class="absolute top-20 right-20 text-amber-200 text-2xl float" style="animation-delay:0.5s">
-     ✦
-    </div>
-    <div class="absolute bottom-20 left-1/4 text-purple-200 text-3xl float" style="animation-delay:1s">
-     ☁
-    </div>
-    <div class="absolute top-1/3 right-10 text-pink-100 text-5xl float" style="animation-delay:1.5s">
-     ♥
-    </div>
-    <div class="absolute bottom-10 right-1/3 text-amber-100 text-2xl sparkle" style="animation-delay:0.8s">
-     ✨
-    </div>
-    <div class="absolute top-1/2 left-5 text-purple-100 text-3xl float" style="animation-delay:2s">
-     ⭐
-    </div>
-   </div>
-   <div class="relative z-10 max-w-2xl">
-    <p class="text-pink-300 text-lg mb-4 tracking-widest uppercase">The Journey to Our Little Miracle</p>
-    <h1 id="heroTitle" class="playfair text-4xl md:text-6xl text-gray-800 leading-tight mb-6" style="font-style:italic;"></h1>
-    <p id="heroSubtitle" class="text-xl md:text-2xl text-gray-500 mb-10"></p><button onclick="document.getElementById('roadmap').scrollIntoView({behavior:'smooth'})" class="inline-flex items-center gap-2 bg-gradient-to-r from-pink-400 to-rose-400 text-white px-8 py-4 rounded-full text-lg font-semibold shadow-lg shadow-pink-200 hover:shadow-xl hover:scale-105 transition-all duration-300"> Begin the Journey ❤️ </button>
-   </div>
-  </section><!-- SECTION 2 - ROADMAP -->
-  <section id="roadmap" class="relative py-24 px-6" style="background:linear-gradient(180deg,#fffbeb,#fdf2f8);">
-   <h2 class="playfair text-3xl md:text-5xl text-center text-gray-800 mb-20">Our Story</h2>
-   <div class="max-w-4xl mx-auto relative">
-    <div class="roadmap-line hidden md:block"></div><!-- Stop 1 -->
-    <div class="roadmap-item flex flex-col md:flex-row items-center mb-20 fade-target">
-     <div class="md:w-1/2 md:pr-12 md:text-right">
-      <div class="bg-white rounded-3xl p-6 shadow-lg shadow-pink-100 border border-pink-50">
-       <div class="w-full h-48 rounded-2xl bg-gradient-to-br from-pink-100 to-amber-50 flex items-center justify-center mb-4"><span class="text-6xl">💒</span>
-       </div>
-       <h3 class="playfair text-2xl text-gray-800 mb-2">Our Beginning</h3>
-       <p class="text-gray-500">Two hearts became one, and our adventure began.</p>
-      </div>
-     </div>
-     <div class="hidden md:flex w-8 h-8 bg-gradient-to-br from-amber-300 to-pink-400 rounded-full border-4 border-white shadow-lg z-10 absolute left-1/2 -translate-x-1/2"></div>
-     <div class="md:w-1/2"></div>
-    </div><!-- Stop 2 -->
-    <div class="roadmap-item flex flex-col md:flex-row items-center mb-20 fade-target" style="animation-delay:0.2s">
-     <div class="md:w-1/2"></div>
-     <div class="hidden md:flex w-8 h-8 bg-gradient-to-br from-purple-300 to-pink-400 rounded-full border-4 border-white shadow-lg z-10 absolute left-1/2 -translate-x-1/2"></div>
-     <div class="md:w-1/2 md:pl-12">
-      <div class="bg-white rounded-3xl p-6 shadow-lg shadow-purple-100 border border-purple-50">
-       <div class="w-full h-48 rounded-2xl bg-gradient-to-br from-purple-100 to-pink-50 flex items-center justify-center mb-4"><span class="text-6xl">🤰</span>
-       </div>
-       <h3 class="playfair text-2xl text-gray-800 mb-2">A New Chapter</h3>
-       <p class="text-gray-500">Our family started growing.</p>
-      </div>
-     </div>
-    </div><!-- Stop 3 -->
-    <div class="roadmap-item flex flex-col md:flex-row items-center mb-20 fade-target" style="animation-delay:0.4s">
-     <div class="md:w-1/2 md:pr-12 md:text-right">
-      <div class="bg-white rounded-3xl p-6 shadow-lg shadow-amber-100 border border-amber-50">
-       <div class="w-full h-48 rounded-2xl bg-gradient-to-br from-amber-50 to-pink-50 flex items-center justify-center mb-4"><span class="text-6xl">👶</span>
-       </div>
-       <h3 class="playfair text-2xl text-gray-800 mb-2">Our Little Explorer</h3>
-       <p class="text-gray-500">Our first little bundle of joy filled our world with happiness.</p>
-      </div>
-     </div>
-     <div class="hidden md:flex w-8 h-8 bg-gradient-to-br from-amber-300 to-rose-400 rounded-full border-4 border-white shadow-lg z-10 absolute left-1/2 -translate-x-1/2"></div>
-     <div class="md:w-1/2"></div>
-    </div><!-- Stop 4 -->
-    <div class="roadmap-item flex flex-col md:flex-row items-center fade-target" style="animation-delay:0.6s">
-     <div class="md:w-1/2"></div>
-     <div class="hidden md:flex w-8 h-8 bg-gradient-to-br from-pink-300 to-rose-500 rounded-full border-4 border-white shadow-lg z-10 absolute left-1/2 -translate-x-1/2"></div>
-     <div class="md:w-1/2 md:pl-12">
-      <div class="bg-white rounded-3xl p-6 shadow-lg shadow-rose-100 border border-rose-50">
-       <div class="w-full h-48 rounded-2xl bg-gradient-to-br from-rose-100 to-purple-50 flex items-center justify-center mb-4"><span class="text-6xl">🩺</span>
-       </div>
-       <h3 class="playfair text-2xl text-gray-800 mb-2">The Next Adventure</h3>
-       <p class="text-gray-500">And now another tiny miracle is on the way.</p>
-      </div>
-     </div>
-    </div>
-   </div>
-  </section><!-- SECTION 3 - GUESS -->
-  <section class="py-24 px-6 text-center" style="background:linear-gradient(180deg,#fdf2f8,#f5f3ff);">
-   <h2 class="playfair text-3xl md:text-5xl text-gray-800 mb-4">Guess the Secret 🤫</h2>
-   <p class="text-gray-500 text-lg mb-12">What do you think it is?</p>
-   <div class="flex flex-wrap justify-center gap-4 max-w-lg mx-auto mb-8"><button onclick="guessReveal(this)" class="guess-btn bg-blue-100 text-blue-600 px-8 py-4 rounded-2xl text-lg font-semibold shadow-md hover:shadow-lg">👦 Boy?</button> <button onclick="guessReveal(this)" class="guess-btn bg-pink-100 text-pink-600 px-8 py-4 rounded-2xl text-lg font-semibold shadow-md hover:shadow-lg">👧 Girl?</button> <button onclick="guessReveal(this)" class="guess-btn bg-amber-100 text-amber-600 px-8 py-4 rounded-2xl text-lg font-semibold shadow-md hover:shadow-lg">👶👶 Twins?</button> <button onclick="guessReveal(this)" class="guess-btn bg-green-100 text-green-600 px-8 py-4 rounded-2xl text-lg font-semibold shadow-md hover:shadow-lg">🦕 Dinosaur?</button>
-   </div>
-   <p id="guessResponse" class="text-2xl text-gray-600 h-10 transition-all"></p>
-  </section><!-- SECTION 4 - SUSPENSE -->
-  <section class="suspense-bg py-32 px-6 text-center relative overflow-hidden">
-   <div class="absolute inset-0 pointer-events-none">
-    <div class="absolute top-10 left-1/4 text-yellow-200 text-sm twinkle">
-     ✦
-    </div>
-    <div class="absolute top-20 right-1/3 text-yellow-100 text-xs twinkle" style="animation-delay:0.5s">
-     ✦
-    </div>
-    <div class="absolute top-1/3 left-10 text-yellow-200 text-lg twinkle" style="animation-delay:1s">
-     ⭐
-    </div>
-    <div class="absolute bottom-1/4 right-20 text-yellow-100 twinkle" style="animation-delay:1.5s">
-     ✦
-    </div>
-    <div class="absolute top-1/2 right-1/4 text-white text-xs twinkle" style="animation-delay:0.3s">
-     •
-    </div>
-    <div class="absolute bottom-20 left-1/3 text-yellow-200 text-sm twinkle" style="animation-delay:2s">
-     ✦
-    </div>
-   </div>
-   <div class="relative z-10 space-y-8">
-    <p class="text-2xl md:text-4xl text-purple-200 playfair">The moment is getting closer...</p>
-    <p class="text-3xl md:text-5xl text-white playfair">Are you ready?</p>
-    <p class="text-xl text-purple-300">Keep scrolling... ↓</p>
-    <div class="text-6xl float">
-     🌙
-    </div>
-   </div>
-  </section><!-- SECTION 5 - MAGIC DOOR -->
-  <section class="py-32 px-6 text-center" style="background:linear-gradient(180deg,#312e81,#4c1d95);">
-   <h2 class="playfair text-3xl md:text-5xl text-purple-100 mb-8">Behind this door is our biggest surprise</h2>
-   <div class="relative inline-block mb-12">
-    <div id="doorFrame" class="relative w-64 h-80 mx-auto">
-     <div class="absolute inset-0 bg-gradient-to-b from-amber-700 to-amber-900 rounded-t-full border-4 border-amber-600 shadow-2xl overflow-hidden">
-      <div class="absolute inset-4 bg-gradient-to-b from-amber-600 to-amber-800 rounded-t-full border-2 border-amber-500">
-       <div class="absolute top-1/2 right-4 w-6 h-6 rounded-full bg-amber-300 shadow-inner"></div>
-       <div class="absolute inset-0 flex items-center justify-center"><span class="text-5xl">✨</span>
-       </div>
-      </div>
-     </div>
-    </div>
-   </div>
-   <div><button id="openDoorBtn" onclick="openDoor()" class="bg-gradient-to-r from-amber-400 to-yellow-400 text-amber-900 px-10 py-5 rounded-full text-xl font-bold shadow-lg shadow-amber-400/30 hover:scale-105 transition-all duration-300"> ✨ Open the Surprise ✨ </button>
-   </div>
-  </section><!-- SECTION 6 - COUNTDOWN -->
-  <section id="countdownSection" class="hidden py-32 px-6 text-center" style="background:linear-gradient(180deg,#4c1d95,#831843);min-height:100%;">
-   <div class="flex items-center justify-center" style="min-height:60%;">
-    <div id="countdownDisplay" class="text-9xl md:text-[12rem] font-bold text-white pulse-glow playfair"></div>
-   </div>
-  </section><!-- SECTION 7 - REVEAL -->
-  <section id="revealSection" class="hidden relative overflow-hidden py-24 px-6 text-center" style="background:linear-gradient(180deg,#fdf2f8,#fbcfe8);min-height:100%;">
-   <div id="confettiContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-   <div id="balloonContainer" class="absolute inset-0 pointer-events-none overflow-hidden"></div>
-   <div class="relative z-10 max-w-3xl mx-auto">
-    <div class="text-6xl mb-6">
-     🎀
-    </div>
-    <h1 id="revealTitle" class="playfair text-5xl md:text-8xl text-pink-600 mb-6 pulse-glow"></h1>
-    <div class="text-6xl mb-6">
-     🎀
-    </div>
-    <p id="revealSub" class="text-2xl md:text-3xl text-gray-600 mb-4 playfair"></p>
-    <p class="text-xl text-gray-500 mb-12">We can't wait to meet you, little princess. 👑</p>
-    <div class="w-full max-w-md mx-auto h-72 rounded-3xl bg-gradient-to-br from-pink-200 to-rose-100 flex items-center justify-center shadow-xl border-4 border-white">
-     <div class="text-center"><span class="text-7xl">👶🎀</span>
-      <p class="text-pink-400 mt-4 font-medium">Photo coming soon</p>
-     </div>
-    </div>
-   </div>
+</head>
+<body>
+
+  
+  <audio id="bgMusic" autoplay loop >
+    <source src="music.mp3" type="audio/mpeg">
+  </audio>
+
+  <button class="music-btn" id="musicBtn" title="Play music">🔇</button>
+
+  <div class="hearts-bg" id="heartsBg"></div>
+  <canvas id="confetti"></canvas>
+
+  <section class="hero" id="top">
+    <div class="hero-badge">✨ A special surprise awaits ✨</div>
+    <h1>Our Love Story</h1>
+    <p class="subtitle">Scroll down through our journey… and discover a secret we've been keeping 🤫</p>
+    <a href="#journey" class="scroll-hint">
+      <span>Begin the journey</span>
+      <span class="arrow">↓</span>
+    </a>
   </section>
+
+  <section class="journey" id="journey">
+    
+      <div class="milestone" data-chapter="4">
+        <div class="milestone-content">
+          <span class="milestone-label">Chapter Four</span>
+          <h3>Hello, Little One 👋</h3>
+          <div class="photo-frame ultrasound-frame">
+            <img src="img5.jpeg" alt="Your ultrasound / x-ray photo here">
+          </div>
+        </div>
+      </div>
+  </section>
+
+  <section class="mystery-section" id="mystery">
+    <div class="mystery-box">
+      <h2>Shhh… It's a Secret!</h2>
+
+      <!-- VOTING -->
+      <div class="vote-section" id="voteSection">
+        <h3>What's Your Guess?</h3>
+        <p class="vote-hint">Pick one — then see what everyone else thinks!</p>
+        <div class="vote-buttons" id="voteButtons">
+          <button class="vote-btn boy" type="button" data-vote="boy">Team Boy 💙</button>
+          <button class="vote-btn girl" type="button" data-vote="girl">Team Girl 💗</button>
+        </div>
+        <p class="vote-loading" id="voteLoading">Counting your vote<span class="dots"></span></p>
+        <div class="vote-results" id="voteResults">
+          <p class="your-guess" id="yourGuess"></p>
+          <div class="vote-bar-wrap">
+            <div class="vote-bar-label boy-label">
+              <span>💙 Boy</span>
+              <span id="boyPct">0%</span>
+            </div>
+            <div class="vote-bar"><div class="vote-bar-fill boy-fill" id="boyBar"></div></div>
+          </div>
+          <div class="vote-bar-wrap">
+            <div class="vote-bar-label girl-label">
+              <span>💗 Girl</span>
+              <span id="girlPct">0%</span>
+            </div>
+            <div class="vote-bar"><div class="vote-bar-fill girl-fill" id="girlBar"></div></div>
+          </div>
+          <p class="vote-total" id="voteTotal"></p>
+          <p class="vote-majority" id="voteMajority"></p>
+        </div>
+      </div>
+
+
+      <div class="envelope-wrap" id="envelopeWrap">
+        <div class="envelope" id="envelope">
+          <div class="envelope-flap"></div>
+          <div class="envelope-body">
+            <span class="envelope-heart">💌</span>
+          </div>
+        </div>
+        <p style="color: var(--text-light); font-size: 0.9rem; margin-bottom: 1rem;">Tap the envelope to open…</p>
+      </div>
+
+      <button class="reveal-btn" id="startReveal" disabled>Ready for the Big Reveal? ✨</button>
+    </div>
+  </section>
+
+  <div class="countdown-overlay" id="countdownOverlay">
+    <p class="countdown-text">The moment is here…</p>
+    <div class="countdown-number" id="countdownNumber">10</div>
+    <div class="countdown-hearts">✨</div>
+  </div>
+
+  <section class="reveal-section" id="reveal">
+    <span class="sparkle" style="top: 15%; left: 10%;">✨</span>
+    <span class="sparkle" style="top: 25%; right: 15%; animation-delay: 0.5s;">💖</span>
+    <span class="sparkle" style="bottom: 30%; left: 20%; animation-delay: 1s;">🌸</span>
+    <span class="sparkle" style="bottom: 20%; right: 10%; animation-delay: 0.3s;">✨</span>
+
+    <h2>Drumroll please…</h2>
+    <div class="reveal-bow">🎀</div>
+    <p class="reveal-main">It's a Girl!</p>
+    <p class="reveal-sub">A little princess is on her way to complete our family. We couldn't be more over the moon!</p>
+
+    <div class="reveal-poll" id="revealPoll">
+      <p id="revealPollText">Loading poll results…</p>
+    </div>
+
+    <p class="reveal-footer">Thank you for sharing this moment with us · Made with love</p>
+  </section>
+
   <script>
-  const defaultConfig = {
-    hero_title: "Every story begins with a little love...",
-    hero_subtitle: "And every journey leads to a beautiful surprise.",
-    reveal_text: "IT'S A GIRL",
-    reveal_subtitle: "Our hearts are overflowing with joy.",
-    background_color: "#fdf2f8",
-    surface_color: "#ffffff",
-    text_color: "#1f2937",
-    primary_action_color: "#ec4899",
-    secondary_action_color: "#d97706"
-  };
+    // ─── CONFIG — change this to something unique for your reveal ───
+    const VOTE_NAMESPACE = 'our-family-gender-reveal-2026';
 
-  function applyConfig(config) {
-    document.getElementById('heroTitle').textContent = config.hero_title || defaultConfig.hero_title;
-    document.getElementById('heroSubtitle').textContent = config.hero_subtitle || defaultConfig.hero_subtitle;
-    document.getElementById('revealTitle').textContent = config.reveal_text || defaultConfig.reveal_text;
-    document.getElementById('revealSub').textContent = config.reveal_subtitle || defaultConfig.reveal_subtitle;
-  }
+    // ─── Background music ───
+    const bgMusic = document.getElementById('bgMusic');
+    const musicBtn = document.getElementById('musicBtn');
+    let musicPlaying = false;
 
-  window.elementSdk.init({
-    defaultConfig,
-    onConfigChange: async (config) => { applyConfig(config); },
-    mapToCapabilities: (config) => ({
-      recolorables: [
-        { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
-        { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
-        { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
-        { get: () => config.primary_action_color || defaultConfig.primary_action_color, set: (v) => { config.primary_action_color = v; window.elementSdk.setConfig({ primary_action_color: v }); } },
-        { get: () => config.secondary_action_color || defaultConfig.secondary_action_color, set: (v) => { config.secondary_action_color = v; window.elementSdk.setConfig({ secondary_action_color: v }); } }
-      ],
-      borderables: [],
-      fontEditable: {
-        get: () => config.font_family || 'Playfair Display',
-        set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); }
-      },
-      fontSizeable: {
-        get: () => config.font_size || 16,
-        set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); }
-      }
-    }),
-    mapToEditPanelValues: (config) => new Map([
-      ["hero_title", config.hero_title || defaultConfig.hero_title],
-      ["hero_subtitle", config.hero_subtitle || defaultConfig.hero_subtitle],
-      ["reveal_text", config.reveal_text || defaultConfig.reveal_text],
-      ["reveal_subtitle", config.reveal_subtitle || defaultConfig.reveal_subtitle]
-    ])
-  });
+    bgMusic.volume = 0.25;
 
-  applyConfig(defaultConfig);
-
-  // Guess responses
-  const responses = ["Nice try 😄", "Not telling yet!", "The answer is closer than you think!", "Keep scrolling! 🤫", "Patience... ✨"];
-  let respIdx = 0;
-  function guessReveal(btn) {
-    const el = document.getElementById('guessResponse');
-    el.textContent = responses[respIdx % responses.length];
-    el.classList.add('scale-110');
-    setTimeout(() => el.classList.remove('scale-110'), 300);
-    respIdx++;
-  }
-
-  // Door open
-  function openDoor() {
-    document.getElementById('openDoorBtn').style.display = 'none';
-    const cs = document.getElementById('countdownSection');
-    cs.classList.remove('hidden');
-    cs.scrollIntoView({ behavior: 'smooth' });
-    startCountdown();
-  }
-
-  function startCountdown() {
-    const display = document.getElementById('countdownDisplay');
-    let count = 4;
-    display.textContent = count;
-    const interval = setInterval(() => {
-      count--;
-      if (count > 0) {
-        display.textContent = count;
+    function toggleMusic() {
+      if (musicPlaying) {
+        bgMusic.pause();
+        musicBtn.textContent = '🔇';
+        musicBtn.classList.remove('playing');
+        musicPlaying = false;
       } else {
-        clearInterval(interval);
-        display.textContent = '';
-        showReveal();
+        bgMusic.play()
+          musicBtn.textContent = '🎶';
+          musicBtn.classList.add('playing');
+          musicPlaying = true;
+        }};
+      
+    
+
+    musicBtn.addEventListener('click', toggleMusic);
+
+    // Start music on first interaction anywhere
+    function tryStartMusic() {
+      if (!musicPlaying) {
+        bgMusic.play().then(() => {
+          musicBtn.textContent = '🎶';
+          musicBtn.classList.add('playing');
+          musicPlaying = true;
+        }).catch(() => {});
       }
-    }, 1200);
-  }
-
-  function showReveal() {
-    const reveal = document.getElementById('revealSection');
-    reveal.classList.remove('hidden');
-    reveal.scrollIntoView({ behavior: 'smooth' });
-    createConfetti();
-    createBalloons();
-  }
-
-  function createConfetti() {
-    const container = document.getElementById('confettiContainer');
-    const colors = ['#ec4899','#f9a8d4','#fbbf24','#a78bfa','#f472b6','#fb7185'];
-    for (let i = 0; i < 80; i++) {
-      const piece = document.createElement('div');
-      piece.className = 'confetti-piece';
-      piece.style.left = Math.random() * 100 + '%';
-      piece.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      piece.style.animationDelay = Math.random() * 2 + 's';
-      piece.style.animationDuration = (2 + Math.random() * 2) + 's';
-      piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
-      piece.style.width = (6 + Math.random() * 8) + 'px';
-      piece.style.height = (6 + Math.random() * 8) + 'px';
-      container.appendChild(piece);
+      document.removeEventListener('click', tryStartMusic);
+      document.removeEventListener('scroll', tryStartMusic);
     }
-  }
+    document.addEventListener('click', tryStartMusic);
+    document.addEventListener('scroll', tryStartMusic, { once: true });
 
-  function createBalloons() {
-    const container = document.getElementById('balloonContainer');
-    const colors = ['#f9a8d4','#fbcfe8','#f472b6','#ec4899','#fda4af'];
-    for (let i = 0; i < 15; i++) {
-      const balloon = document.createElement('div');
-      balloon.className = 'balloon';
-      balloon.style.left = Math.random() * 90 + 5 + '%';
-      balloon.style.bottom = '0';
-      balloon.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
-      balloon.style.animationDelay = Math.random() * 3 + 's';
-      balloon.style.animationDuration = (3 + Math.random() * 3) + 's';
-      container.appendChild(balloon);
+    // ─── Floating background ───
+    const heartsBg = document.getElementById('heartsBg');
+    const floatEmojis = ['✨', '⭐', '🌟', '💫', '✦', '·'];
+    for (let i = 0; i < 16; i++) {
+      const h = document.createElement('div');
+      h.className = 'heart-float';
+      h.textContent = floatEmojis[i % floatEmojis.length];
+      h.style.left = Math.random() * 100 + '%';
+      h.style.animationDuration = (12 + Math.random() * 18) + 's';
+      h.style.animationDelay = Math.random() * 15 + 's';
+      heartsBg.appendChild(h);
     }
-  }
 
-  // Intersection observer for fade animations
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('section-visible'); });
-  }, { threshold: 0.2 });
-  document.querySelectorAll('.roadmap-item').forEach(el => observer.observe(el));
+    // ─── Scroll animations ───
+    const milestones = document.querySelectorAll('.milestone');
+    const pathFill = document.getElementById('pathFill');
 
-  lucide.createIcons();
-</script>
- <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'a0cc6360619041b7',t:'MTc4MTYzOTg5NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) entry.target.classList.add('visible');
+      });
+      updatePathFill();
+    }, { threshold: 0.3, rootMargin: '0px 0px -50px 0px' });
+
+    milestones.forEach(m => observer.observe(m));
+
+    function updatePathFill() {
+      const visible = document.querySelectorAll('.milestone.visible').length;
+      pathFill.style.height = (visible / milestones.length) * 100 + '%';
+    }
+    window.addEventListener('scroll', updatePathFill);
+
+    // ─── Voting (works on GitHub Pages — free counter API) ───
+    const VOTE_API = 'https://countapi.mileshilliard.com/api/v1';
+    const voteButtons = document.getElementById('voteButtons');
+    const voteResults = document.getElementById('voteResults');
+    const voteLoading = document.getElementById('voteLoading');
+    const yourGuessEl = document.getElementById('yourGuess');
+    const boyBar = document.getElementById('boyBar');
+    const girlBar = document.getElementById('girlBar');
+    const boyPctEl = document.getElementById('boyPct');
+    const girlPctEl = document.getElementById('girlPct');
+    const voteTotalEl = document.getElementById('voteTotal');
+    const voteMajorityEl = document.getElementById('voteMajority');
+    const startRevealBtn = document.getElementById('startReveal');
+    const revealPollText = document.getElementById('revealPollText');
+
+    const VOTE_KEY = 'gender_reveal_voted_' + VOTE_NAMESPACE;
+
+    function voteKey(type) {
+      return VOTE_NAMESPACE + '-' + type;
+    }
+
+    function fetchWithTimeout(url, ms) {
+      return Promise.race([
+        fetch(url),
+        new Promise((_, reject) => setTimeout(() => reject(new Error('timeout')), ms))
+      ]);
+    }
+
+    async function fetchCount(type) {
+      const res = await fetchWithTimeout(`${VOTE_API}/get/${voteKey(type)}`, 8000);
+      const data = await res.json();
+      return data.value ?? 0;
+    }
+
+    async function hitCount(type) {
+      const res = await fetchWithTimeout(`${VOTE_API}/hit/${voteKey(type)}`, 8000);
+      const data = await res.json();
+      return data.value ?? 0;
+    }
+
+    function displayResults(boyCount, girlCount, userVote, offlineNote) {
+      const total = boyCount + girlCount;
+      const boyPct = total > 0 ? Math.round((boyCount / total) * 100) : 0;
+      const girlPct = total > 0 ? Math.round((girlCount / total) * 100) : 0;
+
+      if (userVote === 'boy') {
+        yourGuessEl.textContent = '💙 You guessed: Boy!';
+      } else if (userVote === 'girl') {
+        yourGuessEl.textContent = '💗 You guessed: Girl!';
+      } else {
+        yourGuessEl.textContent = '';
+      }
+
+      if (offlineNote) {
+        yourGuessEl.textContent += ' ' + offlineNote;
+      }
+
+      boyPctEl.textContent = boyPct + '%';
+      girlPctEl.textContent = girlPct + '%';
+      boyBar.style.width = boyPct + '%';
+      girlBar.style.width = girlPct + '%';
+      voteTotalEl.textContent = total + ' guess' + (total !== 1 ? 'es' : '') + ' so far';
+
+      if (total > 0) {
+        if (boyPct > girlPct) {
+          voteMajorityEl.textContent = '💙 The crowd thinks it\'s a Boy!';
+        } else if (girlPct > boyPct) {
+          voteMajorityEl.textContent = '💗 The crowd thinks it\'s a Girl!';
+        } else {
+          voteMajorityEl.textContent = '🤔 It\'s a tie! The crowd is split!';
+        }
+      } else {
+        voteMajorityEl.textContent = 'Be the first to guess!';
+      }
+
+      voteLoading.classList.remove('show');
+      voteResults.classList.add('show');
+      startRevealBtn.disabled = false;
+
+      if (total > 0) {
+        const winner = girlPct >= boyPct ? 'Girl' : 'Boy';
+        const winnerPct = Math.max(girlPct, boyPct);
+        const correct = winner === 'Girl';
+        revealPollText.textContent = correct
+          ? `🎉 ${winnerPct}% of ${total} guesses said ${winner} — and they were RIGHT!`
+          : `😄 ${winnerPct}% guessed ${winner}, but surprise — it's a Girl!`;
+      } else {
+        revealPollText.textContent = 'Thanks for guessing!';
+      }
+    }
+
+    async function loadExistingVote() {
+      const saved = localStorage.getItem(VOTE_KEY);
+      if (!saved) return;
+
+      voteButtons.querySelectorAll('.vote-btn').forEach(b => b.disabled = true);
+      voteLoading.classList.add('show');
+
+      try {
+        const [boy, girl] = await Promise.all([fetchCount('boy'), fetchCount('girl')]);
+        displayResults(boy, girl, saved);
+      } catch {
+        displayResults(saved === 'boy' ? 1 : 0, saved === 'girl' ? 1 : 0, saved,
+          '(Showing your guess — live totals load when online)');
+      }
+    }
+
+    voteButtons.addEventListener('click', async (e) => {
+      const btn = e.target.closest('.vote-btn');
+      if (!btn || btn.disabled) return;
+
+      const vote = btn.dataset.vote;
+      voteButtons.querySelectorAll('.vote-btn').forEach(b => b.disabled = true);
+      voteLoading.classList.add('show');
+      voteResults.classList.remove('show');
+
+      try {
+        const boy = vote === 'boy' ? await hitCount('boy') : await fetchCount('boy');
+        const girl = vote === 'girl' ? await hitCount('girl') : await fetchCount('girl');
+        localStorage.setItem(VOTE_KEY, vote);
+        displayResults(boy, girl, vote);
+      } catch (err) {
+        localStorage.setItem(VOTE_KEY, vote);
+        displayResults(
+          vote === 'boy' ? 1 : 0,
+          vote === 'girl' ? 1 : 0,
+          vote,
+          '(Vote saved — full poll works when hosted online)'
+        );
+      }
+    });
+
+    loadExistingVote();
+
+    // ─── Reveal flow ───
+    const envelopeWrap = document.getElementById('envelopeWrap');
+    const envelope = document.getElementById('envelope');
+    const countdownOverlay = document.getElementById('countdownOverlay');
+    const countdownNumber = document.getElementById('countdownNumber');
+    const revealSection = document.getElementById('reveal');
+    let envelopeOpened = false;
+
+    startRevealBtn.addEventListener('click', () => {
+      startRevealBtn.style.display = 'none';
+      envelopeWrap.classList.add('show');
+    });
+
+    envelope.addEventListener('click', () => {
+      if (envelopeOpened) return;
+      envelopeOpened = true;
+      envelope.classList.add('open');
+      setTimeout(() => {
+        envelopeWrap.style.display = 'none';
+        runCountdown();
+      }, 800);
+    });
+
+    function runCountdown() {
+      countdownOverlay.classList.add('active');
+      document.body.style.overflow = 'hidden';
+      let count = 4;
+      countdownNumber.textContent = count;
+
+      const interval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countdownNumber.textContent = count;
+          countdownNumber.style.animation = 'none';
+          countdownNumber.offsetHeight;
+          countdownNumber.style.animation = 'countPop 0.8s ease';
+        } else {
+          clearInterval(interval);
+          countdownNumber.textContent = '🎀';
+          setTimeout(showReveal, 600);
+        }
+      }, 1000);
+    }
+
+    function showReveal() {
+      countdownOverlay.classList.remove('active');
+      document.body.style.overflow = '';
+      revealSection.classList.add('show');
+      revealSection.scrollIntoView({ behavior: 'smooth' });
+      startConfetti();
+    }
+
+    // ─── Confetti ───
+    const canvas = document.getElementById('confetti');
+    const ctx = canvas.getContext('2d');
+    let confettiPieces = [];
+    let confettiRunning = false;
+
+    function resizeCanvas() {
+      canvas.width = window.innerWidth;
+      canvas.height = window.innerHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function startConfetti() {
+      if (confettiRunning) return;
+      confettiRunning = true;
+      const colors = ['#ff8fab', '#ffb3c6', '#ffd6e8', '#ffffff', '#e85d8a', '#ffc0cb', '#ff69b4'];
+      const shapes = ['circle', 'rect', 'heart'];
+
+      for (let i = 0; i < 150; i++) {
+        confettiPieces.push({
+          x: Math.random() * canvas.width,
+          y: Math.random() * canvas.height - canvas.height,
+          w: 6 + Math.random() * 8,
+          h: 6 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          shape: shapes[Math.floor(Math.random() * shapes.length)],
+          vx: (Math.random() - 0.5) * 3,
+          vy: 2 + Math.random() * 4,
+          rotation: Math.random() * 360,
+          rotSpeed: (Math.random() - 0.5) * 10
+        });
+      }
+      animateConfetti();
+    }
+
+    function drawHeart(x, y, size, color) {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.fillStyle = color;
+      ctx.beginPath();
+      ctx.moveTo(0, size * 0.3);
+      ctx.bezierCurveTo(0, 0, -size / 2, 0, -size / 2, size * 0.3);
+      ctx.bezierCurveTo(-size / 2, size * 0.6, 0, size * 0.8, 0, size);
+      ctx.bezierCurveTo(0, size * 0.8, size / 2, size * 0.6, size / 2, size * 0.3);
+      ctx.bezierCurveTo(size / 2, 0, 0, 0, 0, size * 0.3);
+      ctx.fill();
+      ctx.restore();
+    }
+
+    function animateConfetti() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      confettiPieces.forEach(p => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.vy += 0.05;
+        p.rotation += p.rotSpeed;
+        if (p.y > canvas.height + 20) {
+          p.y = -20;
+          p.x = Math.random() * canvas.width;
+        }
+        ctx.save();
+        ctx.translate(p.x, p.y);
+        ctx.rotate(p.rotation * Math.PI / 180);
+        ctx.fillStyle = p.color;
+        if (p.shape === 'circle') {
+          ctx.beginPath();
+          ctx.arc(0, 0, p.w / 2, 0, Math.PI * 2);
+          ctx.fill();
+        } else if (p.shape === 'rect') {
+          ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+        } else {
+          drawHeart(0, 0, p.w, p.color);
+        }
+        ctx.restore();
+      });
+      requestAnimationFrame(animateConfetti);
+    }
+
+    document.querySelector('.scroll-hint').addEventListener('click', (e) => {
+      e.preventDefault();
+      document.getElementById('journey').scrollIntoView({ behavior: 'smooth' });
+    });
+  </script>
+</body>
 </html>
